@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zona Sul - AI Food Waste Reduction Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #059669 0%, #0891b2 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .header .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 0.25rem;
+        }
+        
+        .demo-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        
+        .nav-tab {
+            background: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: #64748b;
+            transition: all 0.2s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-tab.active {
+            background: linear-gradient(135deg, #059669 0%, #0891b2 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+        
+        .nav-tab:hover:not(.active) {
+            background: #f8fafc;
+            color: #475569;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .grid-cols-4 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+        
+        .grid-cols-2 {
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        }
+        
+        .card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+        }
+        
+        .card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .card-subtitle {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+        
+        .metric-large {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        .metric-medium {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .badge-success {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .badge-danger {
+            background: #fecaca;
+            color: #991b1b;
+        }
+        
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 0.5rem;
+            background: #e2e8f0;
+            border-radius: 0.25rem;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #059669, #0891b2);
+            transition: width 0.3s;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid;
+        }
+        
+        .alert-danger {
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+        
+        .alert-warning {
+            background: #fffbeb;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+        
+        .item-list {
+            space-y: 1rem;
+        }
+        
+        .item {
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .item-info h4 {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .item-info p {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .item-actions {
+            text-align: right;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #059669 0%, #0891b2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+        
+        .chef-card {
+            border: 2px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+        
+        .chef-card:hover {
+            border-color: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .chef-card.active {
+            border-color: #059669;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+        }
+        
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .recipe-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .recipe-header {
+            background: linear-gradient(135deg, #059669 0%, #0891b2 100%);
+            color: white;
+            padding: 1rem;
+        }
+        
+        .recipe-body {
+            padding: 1.5rem;
+        }
+        
+        .ingredient-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #fbbf24;
+            color: white;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            margin: 0.25rem 0.25rem 0.25rem 0;
+        }
+        
+        .whatsapp-alert {
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .manager-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .customer-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .status-dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+        }
+        
+        .status-declining {
+            background: #f59e0b;
+        }
+        
+        .status-absent {
+            background: #ef4444;
+        }
+        
+        .status-healthy {
+            background: #10b981;
+        }
+        
+        .icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            fill: currentColor;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .grid-cols-4 {
+                grid-template-columns: 1fr;
+            }
+            
+            .grid-cols-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>Zona Sul</h1>
+            <div class="subtitle">AI-Powered Food Waste Reduction Platform</div>
+        </div>
+        <div class="demo-badge">
+            Demo Environment<br>
+            <strong>Proof of Concept</strong>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('overview')" data-tab="overview">
+                📊 Overview
+            </button>
+            <button class="nav-tab" onclick="showTab('inventory')" data-tab="inventory">
+                📦 Inventory
+            </button>
+            <button class="nav-tab" onclick="showTab('customers')" data-tab="customers">
+                👥 Customers
+            </button>
+            <button class="nav-tab" onclick="showTab('forecast')" data-tab="forecast">
+                📈 Forecast
+            </button>
+            <button class="nav-tab" onclick="showTab('chef-lidy')" data-tab="chef-lidy">
+                👨‍🍳 Chef AI
+            </button>
+            <button class="nav-tab" onclick="showTab('insights')" data-tab="insights">
+                💡 Insights
+            </button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="grid grid-cols-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Waste Reduction</span>
+                        <span class="badge badge-success">↓32%</span>
+                    </div>
+                    <div class="metric-large" style="color: #059669;">32%</div>
+                    <div class="card-subtitle">vs baseline month</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Revenue Uplift</span>
+                        <span class="badge badge-info">+847K</span>
+                    </div>
+                    <div class="metric-large" style="color: #0891b2;">R$ 847K</div>
+                    <div class="card-subtitle">generated monthly</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Customer Engagement</span>
+                        <span class="badge badge-success">+78%</span>
+                    </div>
+                    <div class="metric-large" style="color: #7c3aed;">78%</div>
+                    <div class="card-subtitle">recipe click-through rate</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Forecast Accuracy</span>
+                        <span class="badge badge-warning">94.2%</span>
+                    </div>
+                    <div class="metric-large" style="color: #ea580c;">94.2%</div>
+                    <div class="card-subtitle">AI prediction confidence</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2" style="margin-top: 2rem;">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">AI Solution Overview</span>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Inventory Intelligence</span>
+                                <span style="font-weight: 600;">Active</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%;"></div>
+                            </div>
+                            <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">
+                                Continuous monitoring with expiration alerts
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Customer Segmentation</span>
+                                <span style="font-weight: 600;">6 Segments</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%;"></div>
+                            </div>
+                            <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">
+                                Behavioral clustering of 10,000+ customers for targeted marketing
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Recipe Matching Engine</span>
+                                <span style="font-weight: 600;">Chef Lidy</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 92%;"></div>
+                            </div>
+                            <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">
+                                Personalized recipe suggestions using at-risk inventory
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Business Impact Simulation</span>
+                    </div>
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <div style="display: inline-block; margin: 0 1rem;">
+                            <div class="metric-medium" style="color: #10b981;">2.3M</div>
+                            <div style="font-size: 0.875rem; color: #64748b;">Items Saved</div>
+                        </div>
+                        <div style="display: inline-block; margin: 0 1rem;">
+                            <div class="metric-medium" style="color: #3b82f6;">156%</div>
+                            <div style="font-size: 0.875rem; color: #64748b;">ROI Projected</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f0fdf4; padding: 1rem; border-radius: 0.75rem;">
+                        <h4 style="color: #166534; margin-bottom: 0.5rem;">Key Success Factors</h4>
+                        <ul style="color: #166534; font-size: 0.875rem; padding-left: 1.25rem;">
+                            <li>Target customer retention increases by 26%</li>
+                            <li>Personalized recipe increases basket size by 15%</li>
+                            <li>Customer retention improves by 12% in target segments</li>
+                            <li>Operational efficiency gains through automation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Tab -->
+        <div id="inventory" class="tab-content">
+            <div class="grid grid-cols-4">
+                <div class="card">
+                    <div class="card-title">Total SKUs</div>
+                    <div class="metric-large">30</div>
+                    <div class="card-subtitle">Perishable items tracked</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">At Risk Items</div>
+                    <div class="metric-large" style="color: #f59e0b;">7</div>
+                    <div class="card-subtitle">Expire within 3 days</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Total Inventory Value</div>
+                    <div class="metric-large">R$ 22.8K</div>
+                    <div class="card-subtitle">Current stock value</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">At Risk Value</div>
+                    <div class="metric-large" style="color: #ef4444;">R$ 10.1K</div>
+                    <div class="card-subtitle">Potential waste value</div>
+                </div>
+            </div>
+
+            <div class="alert alert-danger">
+                <h3 style="margin-bottom: 0.75rem;">⚠️ High Priority Items - Immediate Action Required</h3>
+                <p>These items expire within 3 days and should be featured in Chef Lidy's recipe recommendations</p>
+            </div>
+
+            <div class="card">
+                <div class="item-list">
+                    <div class="item">
+                        <div class="item-info">
+                            <h4>Fresh Strawberries</h4>
+                            <p>SKU: STR001 • Stock: 245 units</p>
+                        </div>
+                        <div class="item-actions">
+                            <div style="margin-bottom: 0.5rem;">
+                                <span class="badge badge-danger">-210 days until expiry</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="generateRecipe('strawberries')">Generate Recipe</button>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-info">
+                            <h4>Baby Arugula</h4>
+                            <p>SKU: ARG001 • Stock: 156 units</p>
+                        </div>
+                        <div class="item-actions">
+                            <div style="margin-bottom: 0.5rem;">
+                                <span class="badge badge-danger">-211 days until expiry</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="generateRecipe('arugula')">Generate Recipe</button>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-info">
+                            <h4>Tiger Shrimp</h4>
+                            <p>SKU: SHR001 • Stock: 67 units</p>
+                        </div>
+                        <div class="item-actions">
+                            <div style="margin-bottom: 0.5rem;">
+                                <span class="badge badge-danger">-210 days until expiry</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="generateRecipe('shrimp')">Generate Recipe</button>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-info">
+                            <h4>Artisan Bread</h4>
+                            <p>SKU: BRD001 • Stock: 78 units</p>
+                        </div>
+                        <div class="item-actions">
+                            <div style="margin-bottom: 0.5rem;">
+                                <span class="badge badge-danger">-211 days until expiry</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="generateRecipe('bread')">Generate Recipe</button>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-info">
+                            <h4>Atlantic Salmon</h4>
+                            <p>SKU: SAL001 • Stock: 45 units</p>
+                        </div>
+                        <div class="item-actions">
+                            <div style="margin-bottom: 0.5rem;">
+                                <span class="badge badge-danger">-210 days until expiry</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="generateRecipe('salmon')">Generate Recipe</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customers Tab -->
+        <div id="customers" class="tab-content">
+            <div class="grid grid-cols-4">
+                <div class="card">
+                    <div class="card-title">Total Customers</div>
+                    <div class="metric-large">10,000</div>
+                    <div class="card-subtitle">Active in last 60 days</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Avg Basket Size</div>
+                    <div class="metric-large">R$ 166</div>
+                    <div class="card-subtitle">Across all segments</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Recipe Target</div>
+                    <div class="metric-large" style="color: #10b981;">6,918</div>
+                    <div class="card-subtitle">High recipe opportunity</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Segments Active</div>
+                    <div class="metric-large">6</div>
+                    <div class="card-subtitle">Behavioral clusters</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Customer Segment Distribution</span>
+                    <span class="card-subtitle">Breakdown of 10,000 customers based on purchasing behavior analysis</span>
+                </div>
+                
+                <div style="margin-top: 1.5rem;">
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: 600;">💚 Health-Focused Shoppers</span>
+                            <span>1,842 customers • 18.4%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 18.4%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: 600;">👨‍👩‍👧‍👦 Weekly Family Shoppers</span>
+                            <span>2,156 customers • 21.6%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 21.6%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: 600;">⏰ Last-Minute Buyers</span>
+                            <span>1,634 customers • 16.3%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 16.3%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: 600;">🍽️ Gourmet Enthusiasts</span>
+                            <span>987 customers • 9.9%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 9.9%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: 600;">🌱 Eco-Conscious Consumers</span>
+                            <span>1,456 customers • 14.6%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 14.6%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: 600;">💰 Budget-Conscious Shoppers</span>
+                            <span>1,925 customers • 19.3%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 19.3%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Retention Alerts -->
+            <div class="alert alert-warning">
+                <h3 style="margin-bottom: 0.75rem;">📉 Customer Retention Alerts</h3>
+                <p>These customers show declining behavior and need targeted intervention with personalized recipes</p>
+            </div>
+
+            <div class="grid grid-cols-2">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">💚 Health-Focused Shoppers</span>
+                        <span class="badge badge-info">1,842 customers • 18.4% of total base</span>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span style="font-weight: 500;">Avg Basket</span>
+                            <span style="font-weight: 500;">Frequency</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-size: 1.25rem; font-weight: 700; color: #059669;">R$ 156.8</span>
+                            <span style="font-size: 1.25rem; font-weight: 700; color: #059669;">2.3x/week</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="font-weight: 500; margin-bottom: 0.5rem;">Top Categories</div>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <span class="badge badge-success">Organic Vegetables</span>
+                            <span class="badge badge-success">Lean Proteins</span>
+                            <span class="badge badge-success">Superfoods</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="font-weight: 500; margin-bottom: 0.5rem;">Key Behaviors</div>
+                        <ul style="font-size: 0.875rem; color: #64748b; padding-left: 1rem;">
+                            <li>High willingness to pay premium for organic</li>
+                            <li>Reads ingredient labels carefully</li>
+                            <li>Responds well to nutritional content in recipes</li>
+                            <li>Shops primarily on weekends</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: #059669; color: white; padding: 0.75rem; border-radius: 0.5rem;">
+                        <div style="font-weight: 500;">Recipe Marketing Opportunity</div>
+                        <div style="font-size: 0.875rem; opacity: 0.9;">High - loves trying new healthy recipes</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">👨‍👩‍👧‍👦 Weekly Family Shoppers</span>
+                        <span class="badge badge-info">2,156 customers • 21.6% of total base</span>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span style="font-weight: 500;">Avg Basket</span>
+                            <span style="font-weight: 500;">Frequency</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-size: 1.25rem; font-weight: 700; color: #0891b2;">R$ 234.5</span>
+                            <span style="font-size: 1.25rem; font-weight: 700; color: #0891b2;">1.2x/week</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="font-weight: 500; margin-bottom: 0.5rem;">Top Categories</div>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <span class="badge badge-info">Family Packs</span>
+                            <span class="badge badge-info">Dairy Products</span>
+                            <span class="badge badge-info">Fruits</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="font-weight: 500; margin-bottom: 0.5rem;">Key Behaviors</div>
+                        <ul style="font-size: 0.875rem; color: #64748b; padding-left: 1rem;">
+                            <li>Largest basket sizes in store</li>
+                            <li>Price-conscious but quality-focused</li>
+                            <li>Shops with detailed lists</li>
+                            <li>Prefers Saturday morning visits</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: #0891b2; color: white; padding: 0.75rem; border-radius: 0.5rem;">
+                        <div style="font-weight: 500;">Recipe Marketing Opportunity</div>
+                        <div style="font-size: 0.875rem; opacity: 0.9;">Medium - interested in family meal prep</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Forecast Tab -->
+        <div id="forecast" class="tab-content">
+            <div class="grid grid-cols-4">
+                <div class="card">
+                    <div class="card-title">Forecast Accuracy</div>
+                    <div class="metric-large" style="color: #10b981;">93.6%</div>
+                    <div class="card-subtitle">Average confidence</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Critical Items</div>
+                    <div class="metric-large" style="color: #ef4444;">3</div>
+                    <div class="card-subtitle">Need immediate action</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Understock Risk</div>
+                    <div class="metric-large" style="color: #f59e0b;">2</div>
+                    <div class="card-subtitle">Items need restocking</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Overstock Items</div>
+                    <div class="metric-large" style="color: #3b82f6;">2</div>
+                    <div class="card-subtitle">Recipe opportunities</div>
+                </div>
+            </div>
+
+            <div class="alert alert-danger">
+                <h3 style="margin-bottom: 0.75rem;">🚨 Critical Stock Situations - Immediate Action Required</h3>
+                <p>Items with less than 3 days of inventory based on predicted demand</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">30-Day Demand Forecast Analysis</span>
+                    <span class="card-subtitle">AI-powered predictions for key SKUs with confidence intervals and influencing factors</span>
+                </div>
+
+                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead>
+                        <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+                            <th style="padding: 0.75rem; text-align: left; font-weight: 600;">Product</th>
+                            <th style="padding: 0.75rem; text-align: center; font-weight: 600;">Current Stock</th>
+                            <th style="padding: 0.75rem; text-align: center; font-weight: 600;">Predicted Demand</th>
+                            <th style="padding: 0.75rem; text-align: center; font-weight: 600;">Confidence</th>
+                            <th style="padding: 0.75rem; text-align: center; font-weight: 600;">Trend</th>
+                            <th style="padding: 0.75rem; text-align: center; font-weight: 600;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 0.75rem;">
+                                <div style="font-weight: 600;">Fresh Strawberries</div>
+                                <div style="font-size: 0.75rem; color: #64748b;">STR001 • Fruits</div>
+                            </td>
+                            <td style="padding: 0.75rem; text-align: center; font-weight: 600;">245</td>
+                            <td style="padding: 0.75rem; text-align: center; font-weight: 600;">189</td>
+                            <td style="padding: 0.75rem; text-align: center;">
+                                <div class="progress-bar" style="width: 60px; margin: 0 auto;">
+                                    <div class="progress-fill" style="width: 94.2%;"></div>
+                                </div>
+                                <div style="font-size: 0.75rem; margin-top: 0.25rem;">94.2%</div>
+                            </td>
+                            <td style="padding: 0.75rem; text-align: center; color: #ef4444;">📉</td>
+                            <td style="padding: 0.75rem; text-align: center;">
+                                <span class="badge badge-info">Overstock</span>
+                            </td>
+                        </tr>
+                        
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 0.75rem;">
+                                <div style="font-weight: 600;">Chicken Breast</div>
+                                <div style="font-size: 0.75rem; color: #64748b;">CHK001 • Meat</div>
+                            </td>
+                            <td style="padding: 0.75rem; text-align: center; font-weight: 600;">89</td>
+                            <td style="padding: 0.75rem; text-align: center; font-weight: 600;">124</td>
+                            <td style="padding: 0.75rem; text-align: center;">
+                                <div class="progress-bar" style="width: 60px; margin: 0 auto;">
+                                    <div class="progress-fill" style="width: 96.8%;"></div>
+                                </div>
+                                <div style="font-size: 0.75rem; margin-top: 0.25rem;">96.8%</div>
+                            </td>
+                            <td style="padding: 0.75rem; text-align: center; color: #10b981;">📈</td>
+                            <td style="padding: 0.75rem; text-align: center;">
+                                <span class="badge badge-warning">Understock</span>
+                            </td>
+                        </tr>
+                        
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 0.75rem;">
+                                <div style="font-weight: 600;">Tiger Shrimp</div>
+                                <div style="font-size: 0.75rem; color: #64748b;">SHR001 • Seafood</div>
+                            </td>
+                            <td style="padding: 0.75rem; text-align: center; font-weight: 600;">67</td>
+                            <td style="padding: 0.75rem; text-align: center; font-weight: 600;">145</td>
+                            <td style="padding: 0.75rem; text-align: center;">
+                                <div class="progress-bar" style="width: 60px; margin: 0 auto;">
+                                    <div class="progress-fill" style="width: 91.3%;"></div>
+                                </div>
+                                <div style="font-size: 0.75rem; margin-top: 0.25rem;">91.3%</div>
+                            </td>
+                            <td style="padding: 0.75rem; text-align: center; color: #10b981;">📈</td>
+                            <td style="padding: 0.75rem; text-align: center;">
+                                <span class="badge badge-danger">Critical</span>
+                            </td>
+                        </tr>
+                        
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 0.75rem;">
+                                <div style="font-weight: 600;">Artisan Bread</div>
+                                <div style="font-size: 0.75rem; color: #64748b;">BRD001 • Bakery</div>
+                            </td>
+                            <td style="padding: 0.75rem; text-align: center; font-weight: 600;">78</td>
+                            <td style="padding: 0.75rem; text-align: center; font-weight: 600;">156</td>
+                            <td style="padding: 0.75rem; text-align: center;">
+                                <div class="progress-bar" style="width: 60px; margin: 0 auto;">
+                                    <div class="progress-fill" style="width: 93.4%;"></div>
+                                </div>
+                                <div style="font-size: 0.75rem; margin-top: 0.25rem;">93.4%</div>
+                            </td>
+                            <td style="padding: 0.75rem; text-align: center; color: #10b981;">📈</td>
+                            <td style="padding: 0.75rem; text-align: center;">
+                                <span class="badge badge-danger">Critical</span>
+                            </td>
+                        </tr>
+                        
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 0.75rem;">
+                                <div style="font-weight: 600;">Atlantic Salmon</div>
+                                <div style="font-size: 0.75rem; color: #64748b;">SAL001 • Seafood</div>
+                            </td>
+                            <td style="padding: 0.75rem; text-align: center; font-weight: 600;">45</td>
+                            <td style="padding: 0.75rem; text-align: center; font-weight: 600;">89</td>
+                            <td style="padding: 0.75rem; text-align: center;">
+                                <div class="progress-bar" style="width: 60px; margin: 0 auto;">
+                                    <div class="progress-fill" style="width: 92.8%;"></div>
+                                </div>
+                                <div style="font-size: 0.75rem; margin-top: 0.25rem;">92.8%</div>
+                            </td>
+                            <td style="padding: 0.75rem; text-align: center; color: #10b981;">📈</td>
+                            <td style="padding: 0.75rem; text-align: center;">
+                                <span class="badge badge-danger">Critical</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="grid grid-cols-2" style="margin-top: 2rem;">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">📊 Demand Prediction Model Features</span>
+                        <span class="card-subtitle">Key factors influencing our AI demand forecasting accuracy</span>
+                    </div>
+                    
+                    <div style="margin-top: 1rem;">
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Historical Purchase Patterns</span>
+                                <span style="font-weight: 600;">35% weight</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 35%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Seasonality Factors</span>
+                                <span style="font-weight: 600;">28% weight</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 28%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Customer Segment Behavior</span>
+                                <span style="font-weight: 600;">22% weight</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 22%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>External Factors</span>
+                                <span style="font-weight: 600;">15% weight</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 15%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">🎯 Forecast Confidence by Category</span>
+                        <span class="card-subtitle">Model performance varies by product category based on predictability</span>
+                    </div>
+                    
+                    <div style="margin-top: 1rem;">
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Dairy</span>
+                                <span style="font-weight: 600;">96.8%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 96.8%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Meat</span>
+                                <span style="font-weight: 600;">94.5%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 94.5%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Seafood</span>
+                                <span style="font-weight: 600;">92.1%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 92.1%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Vegetables</span>
+                                <span style="font-weight: 600;">91.7%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 91.7%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Fruits</span>
+                                <span style="font-weight: 600;">89.4%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 89.4%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Bakery</span>
+                                <span style="font-weight: 600;">88.2%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 88.2%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chef Lidy Tab -->
+        <div id="chef-lidy" class="tab-content">
+            <div class="card" style="background: linear-gradient(135deg, #059669 0%, #0891b2 100%); color: white; text-align: center; margin-bottom: 2rem;">
+                <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">👨‍🍳 Meet Chef Lidy</h2>
+                <p style="font-size: 1.125rem; opacity: 0.9;">Your AI culinary companion, turning at-risk ingredients into delicious opportunities!</p>
+            </div>
+
+            <!-- Chef Selection -->
+            <div class="grid grid-cols-4" style="margin-bottom: 2rem;">
+                <div class="chef-card card active" onclick="selectChef('lidy')">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">👨‍🍳</div>
+                        <h3 style="color: #059669; margin-bottom: 0.5rem;">Chef Lidy</h3>
+                        <p style="font-size: 0.875rem; color: #64748b;">General Culinary Expert</p>
+                        <div class="badge badge-success" style="margin-top: 0.5rem;">Active</div>
+                    </div>
+                </div>
+                
+                <div class="chef-card card" onclick="selectChef('jimmy')">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🥩</div>
+                        <h3 style="color: #64748b; margin-bottom: 0.5rem;">Chef Jimmy</h3>
+                        <p style="font-size: 0.875rem; color: #64748b;">Meat & BBQ Specialist</p>
+                        <div class="badge badge-warning" style="margin-top: 0.5rem;">Coming Soon</div>
+                    </div>
+                </div>
+                
+                <div class="chef-card card" onclick="selectChef('loren')">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🥬</div>
+                        <h3 style="color: #64748b; margin-bottom: 0.5rem;">Chef Loren</h3>
+                        <p style="font-size: 0.875rem; color: #64748b;">Plant-Based Pioneer</p>
+                        <div class="badge badge-warning" style="margin-top: 0.5rem;">Coming Soon</div>
+                    </div>
+                </div>
+                
+                <div class="chef-card card">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">➕</div>
+                        <h3 style="color: #64748b; margin-bottom: 0.5rem;">More Chefs</h3>
+                        <p style="font-size: 0.875rem; color: #64748b;">Specialized Cuisine</p>
+                        <div class="badge" style="background: #f1f5f9; color: #64748b; margin-top: 0.5rem;">Future</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Recipe Recommendations -->
+            <div class="recipe-grid">
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <h3 style="margin-bottom: 0.5rem;">🥗 Strawberry Arugula Power Salad</h3>
+                        <p style="font-size: 0.875rem; opacity: 0.9;">"Perfect way to use those beautiful strawberries before they lose their sparkle!" - Chef Lidy</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                            <span>⏱️ 15 min</span>
+                            <span>👥 Serves 4</span>
+                            <span style="background: rgba(255,255,255,0.2); padding: 0.25rem 0.5rem; border-radius: 0.5rem;">Easy</span>
+                        </div>
+                    </div>
+                    <div class="recipe-body">
+                        <div style="margin-bottom: 1rem;">
+                            <strong>At-Risk Ingredients Used:</strong>
+                            <div style="margin-top: 0.5rem;">
+                                <span class="ingredient-tag">Fresh Strawberries</span>
+                                <span class="ingredient-tag">Baby Arugula</span>
+                                <span class="ingredient-tag">Tiger Shrimp</span>
+                            </div>
+                        </div>
+                        
+                        <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 1rem;">
+                            Combine fresh arugula with sliced strawberries and grilled shrimp for a protein-packed lunch.
+                        </p>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <strong>Target Segment:</strong>
+                            <div class="badge badge-success" style="margin-left: 0.5rem;">Health-Focused Shoppers</div>
+                        </div>
+                        
+                        <button class="btn btn-primary" style="width: 100%;" onclick="showRecipeDetails('strawberry-salad')">
+                            💚 Get Full Recipe
+                        </button>
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <h3 style="margin-bottom: 0.5rem;">🍞 Quick Artisan Bread Bruschetta</h3>
+                        <p style="font-size: 0.875rem; opacity: 0.9;">"Transform day-old bread into something magical! No waste, all taste." - Chef Lidy</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                            <span>⏱️ 10 min</span>
+                            <span>👥 Serves 6</span>
+                            <span style="background: rgba(255,255,255,0.2); padding: 0.25rem 0.5rem; border-radius: 0.5rem;">Easy</span>
+                        </div>
+                    </div>
+                    <div class="recipe-body">
+                        <div style="margin-bottom: 1rem;">
+                            <strong>At-Risk Ingredients Used:</strong>
+                            <div style="margin-top: 0.5rem;">
+                                <span class="ingredient-tag">Artisan Bread</span>
+                                <span class="ingredient-tag">Cherry Tomatoes</span>
+                                <span class="ingredient-tag">Fresh Mozzarella</span>
+                            </div>
+                        </div>
+                        
+                        <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 1rem;">
+                            Toast bread slices, top with diced tomatoes and torn mozzarella.
+                        </p>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <strong>Target Segment:</strong>
+                            <div class="badge badge-warning" style="margin-left: 0.5rem;">Last-Minute Buyers</div>
+                        </div>
+                        
+                        <button class="btn btn-primary" style="width: 100%;" onclick="showRecipeDetails('bruschetta')">
+                            💚 Get Full Recipe
+                        </button>
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <h3 style="margin-bottom: 0.5rem;">🐟 Tropical Mango Salmon</h3>
+                        <p style="font-size: 0.875rem; opacity: 0.9;">"The sweet mangoes balance the rich salmon perfectly - a restaurant-quality dish at home!" - Chef Lidy</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                            <span>⏱️ 25 min</span>
+                            <span>👥 Serves 2</span>
+                            <span style="background: rgba(255,255,255,0.2); padding: 0.25rem 0.5rem; border-radius: 0.5rem;">Medium</span>
+                        </div>
+                    </div>
+                    <div class="recipe-body">
+                        <div style="margin-bottom: 1rem;">
+                            <strong>At-Risk Ingredients Used:</strong>
+                            <div style="margin-top: 0.5rem;">
+                                <span class="ingredient-tag">Atlantic Salmon</span>
+                                <span class="ingredient-tag">Ripe Mangoes</span>
+                                <span class="ingredient-tag">Baby Arugula</span>
+                            </div>
+                        </div>
+                        
+                        <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 1rem;">
+                            Pan-sear salmon, serve with mango salsa over arugula bed.
+                        </p>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <strong>Target Segment:</strong>
+                            <div class="badge badge-info" style="margin-left: 0.5rem;">Gourmet Enthusiasts</div>
+                        </div>
+                        
+                        <button class="btn btn-primary" style="width: 100%;" onclick="showRecipeDetails('mango-salmon')">
+                            💚 Get Full Recipe
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe Performance Metrics -->
+            <div class="card" style="margin-top: 2rem;">
+                <div class="card-header">
+                    <span class="card-title">📊 Recipe Campaign Performance (Last 7 Days)</span>
+                </div>
+                
+                <div class="grid grid-cols-4">
+                    <div style="text-align: center;">
+                        <div class="metric-large" style="color: #059669;">12,847</div>
+                        <div style="font-size: 0.875rem; color: #64748b;">Recipes Sent</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="metric-large" style="color: #0891b2;">84.2%</div>
+                        <div style="font-size: 0.875rem; color: #64748b;">Open Rate</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="metric-large" style="color: #7c3aed;">7,432</div>
+                        <div style="font-size: 0.875rem; color: #64748b;">Recipe Views</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="metric-large" style="color: #10b981;">31.8%</div>
+                        <div style="font-size: 0.875rem; color: #64748b;">Purchase Conversion</div>
+                    </div>
+                </div>
+                
+                <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 0.75rem; margin-top: 1.5rem;">
+                    <h4 style="color: #166534; margin-bottom: 1rem;">💰 Financial Impact</h4>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-size: 2rem; font-weight: 700; color: #10b981;">R$ 387,420</div>
+                            <div style="color: #166534;">Revenue incremental (7 days)</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="color: #166534; margin-bottom: 0.5rem;">
+                                <strong>ROI: 892%</strong> • Custo/aquisição: R$ 3,20
+                            </div>
+                            <div style="font-size: 0.875rem; color: #166534;">
+                                2,364 nuevos clientes conquistados através de receitas
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insights Tab -->
+        <div id="insights" class="tab-content">
+            <div class="whatsapp-alert">
+                <h3 style="margin-bottom: 0.75rem;">📱 WhatsApp Manager Alerts - Personal Touch Enhancement</h3>
+                <p>AI-powered suggestions to help department managers maintain personal relationships with customers</p>
+            </div>
+
+            <div class="grid grid-cols-2">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">🥩 Carnes & Aves - João Silva (Manager)</span>
+                        <span class="badge badge-warning">3 Customer Alerts</span>
+                    </div>
+                    
+                    <div class="manager-card">
+                        <div class="customer-status">
+                            <div class="status-dot status-declining"></div>
+                            <strong>Maria Santos (VIP Customer)</strong>
+                        </div>
+                        <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 0.75rem;">
+                            <strong>Behavior Change:</strong> Basket value down 30% (R$ 280 → R$ 195)<br>
+                            <strong>Last Purchase:</strong> 2 weeks ago (usually weekly)<br>
+                            <strong>Favorite Items:</strong> Wagyu steak, organic chicken breast
+                        </p>
+                        <div style="background: #fffbeb; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 0.75rem;">
+                            <strong>💡 AI Suggestion:</strong> "Oi Maria! Chegou aquele wagyu especial que você adora. Separei um para você - perfeito para o fim de semana! 🥩"
+                        </div>
+                        <div style="background: #fef2f2; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 0.75rem;">
+                            <strong>🚨 At-Risk Inventory Match:</strong> Premium Wagyu expires in 2 days (Current: 12 units, Predicted demand: 8)
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="sendWhatsApp('maria-wagyu')">
+                            📱 Send WhatsApp Message
+                        </button>
+                    </div>
+
+                    <div class="manager-card">
+                        <div class="customer-status">
+                            <div class="status-dot status-absent"></div>
+                            <strong>Carlos Mendes (Regular)</strong>
+                        </div>
+                        <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 0.75rem;">
+                            <strong>Behavior Change:</strong> Absent for 5 weeks<br>
+                            <strong>Previous Pattern:</strong> Monthly large purchases (R$ 400+)<br>
+                            <strong>Favorite Items:</strong> Premium cuts for BBQ, imported sausages
+                        </p>
+                        <div style="background: #fffbeb; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 0.75rem;">
+                            <strong>💡 AI Suggestion:</strong> "E aí Carlos! Faz tempo que não te vejo... Chegou chorizo espanhol novinho, perfeito para seus churrascos!"
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="sendWhatsApp('carlos-return')">
+                            📱 Send Reactivation Message
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">🐟 Pescados - Ana Costa (Manager)</span>
+                        <span class="badge badge-danger">2 Critical Alerts</span>
+                    </div>
+                    
+                    <div class="manager-card">
+                        <div class="customer-status">
+                            <div class="status-dot status-declining"></div>
+                            <strong>Roberto Silva (Seafood Lover)</strong>
+                        </div>
+                        <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 0.75rem;">
+                            <strong>Behavior Change:</strong> Frequency down 50% (2x/week → 1x/week)<br>
+                            <strong>Last Purchase:</strong> 10 days ago<br>
+                            <strong>Favorite Items:</strong> Fresh salmon, tuna steaks, sea bass
+                        </p>
+                        <div style="background: #fffbeb; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 0.75rem;">
+                            <strong>💡 AI Suggestion:</strong> "Oi Roberto! Salmão do Atlântico fresquinho chegou hoje. Te guardei o melhor pedaço! 🐟"
+                        </div>
+                        <div style="background: #fef2f2; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 0.75rem;">
+                            <strong>🚨 Perfect Match:</strong> Atlantic Salmon expires tomorrow! Recipe opportunity with Chef Lidy.
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="sendWhatsApp('roberto-salmon')">
+                            📱 Send Personal Offer
+                        </button>
+                    </div>
+
+                    <div class="manager-card">
+                        <div class="customer-status">
+                            <div class="status-dot status-healthy"></div>
+                            <strong>Fernanda Lima (Gourmet)</strong>
+                        </div>
+                        <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 0.75rem;">
+                            <strong>Status:</strong> Healthy customer, high engagement<br>
+                            <strong>Pattern:</strong> Loves trying new recipes<br>
+                            <strong>Opportunity:</strong> Tiger Shrimp + Chef Lidy recipe
+                        </p>
+                        <div style="background: #f0fdf4; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 0.75rem;">
+                            <strong>💡 Recipe Opportunity:</strong> "Fernanda, Chef Lidy criou uma receita incrível com camarão! Quer que eu separe os ingredientes?"
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="sendWhatsApp('fernanda-recipe')">
+                            📱 Share Recipe Offer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strategic Recommendations -->
+            <div class="card" style="margin-top: 2rem;">
+                <div class="card-header">
+                    <span class="card-title">💡 Strategic Recommendations for Scale</span>
+                    <span class="card-subtitle">Next steps to expand the AI-powered food waste reduction platform across all Zona Sul locations</span>
+                </div>
+                
+                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <div>
+                        <h4 style="color: #059669; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: #059669; color: white; width: 1.5rem; height: 1.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem;">1</span>
+                            Phase 1: Foundation
+                        </h4>
+                        <ul style="font-size: 0.875rem; color: #64748b; line-height: 1.6;">
+                            <li style="margin-bottom: 0.5rem;">• Deploy to 5 pilot stores</li>
+                            <li style="margin-bottom: 0.5rem;">• Integrate with existing POS systems</li>
+                            <li style="margin-bottom: 0.5rem;">• Train staff on new workflows</li>
+                            <li style="margin-bottom: 0.5rem;">• Establish data collection protocols</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: #0891b2; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: #0891b2; color: white; width: 1.5rem; height: 1.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem;">2</span>
+                            Phase 2: Expansion
+                        </h4>
+                        <ul style="font-size: 0.875rem; color: #64748b; line-height: 1.6;">
+                            <li style="margin-bottom: 0.5rem;">• Roll out to 25 stores within 6 months</li>
+                            <li style="margin-bottom: 0.5rem;">• Launch customer mobile app</li>
+                            <li style="margin-bottom: 0.5rem;">• Advanced ML model refinement</li>
+                            <li style="margin-bottom: 0.5rem;">• Partner with local suppliers</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: #7c3aed; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: #7c3aed; color: white; width: 1.5rem; height: 1.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem;">3</span>
+                            Phase 3: Optimization
+                        </h4>
+                        <ul style="font-size: 0.875rem; color: #64748b; line-height: 1.6;">
+                            <li style="margin-bottom: 0.5rem;">• Industry leadership in sustainability</li>
+                            <li style="margin-bottom: 0.5rem;">• Cross-chain partnership opportunities</li>
+                            <li style="margin-bottom: 0.5rem;">• AI-powered supply chain optimization</li>
+                            <li style="margin-bottom: 0.5rem;">• Customer behavioral prediction engine</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); padding: 1.5rem; border-radius: 0.75rem; margin-top: 2rem; border: 1px solid #bbf7d0;">
+                    <div style="display: flex; justify-content: between; align-items: center;">
+                        <div>
+                            <h4 style="color: #166534; font-weight: 700; margin-bottom: 0.5rem;">Expected ROI - Full Implementation</h4>
+                            <p style="color: #166534; font-size: 0.875rem;">Projected 18-month returns across all 44 Zona Sul locations</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #10b981;">R$ 12.8M</div>
+                            <div style="font-size: 0.75rem; color: #166534;">Revenue Increase</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #10b981;">67%</div>
+                            <div style="font-size: 0.75rem; color: #166534;">Waste Reduction</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #10b981;">847%</div>
+                            <div style="font-size: 0.75rem; color: #166534;">ROI</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #10b981;">25,000+</div>
+                            <div style="font-size: 0.75rem; color: #166534;">Customer Retention</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        }
+
+        // Chef selection functionality
+        function selectChef(chefName) {
+            const chefCards = document.querySelectorAll('.chef-card');
+            chefCards.forEach(card => card.classList.remove('active'));
+            
+            event.target.closest('.chef-card').classList.add('active');
+            
+            // In a real app, this would load different recipes based on chef
+            console.log(`Selected chef: ${chefName}`);
+        }
+
+        // Recipe generation functionality
+        function generateRecipe(ingredient) {
+            alert(`Generating Chef Lidy recipe for ${ingredient}... \n\nThis would create a new recipe targeting customers who previously bought ${ingredient} and haven't returned recently!`);
+        }
+
+        // Recipe details functionality
+        function showRecipeDetails(recipeId) {
+            alert(`Opening full recipe details for ${recipeId}...\n\nThis would show:\n- Complete ingredient list\n- Step-by-step instructions\n- Nutritional information\n- Customer targeting info`);
+        }
+
+        // WhatsApp functionality
+        function sendWhatsApp(alertId) {
+            const messages = {
+                'maria-wagyu': 'Oi Maria! 👋 Chegou aquele wagyu especial que você adora. Separei um para você - perfeito para o fim de semana! 🥩 Quer que eu guarde?',
+                'carlos-return': 'E aí Carlos! 😊 Faz tempo que não te vejo... Chegou chorizo espanhol novinho, perfeito para seus churrascos! Quando pode passar?',
+                'roberto-salmon': 'Oi Roberto! 🐟 Salmão do Atlântico fresquinho chegou hoje. Te guardei o melhor pedaço! Interessado?',
+                'fernanda-recipe': 'Fernanda! 👨‍🍳 Chef Lidy criou uma receita incrível com camarão. Quer que eu separe os ingredientes? Te mando a receita!'
+            };
+            
+            const message = messages[alertId] || 'Mensagem personalizada do gerente';
+            
+            alert(`📱 WhatsApp Message Preview:\n\n"${message}"\n\n✅ This would be sent directly through the manager's WhatsApp Business account, maintaining the personal touch while leveraging AI insights!`);
+        }
+
+        // Simulate real-time updates
+        function updateMetrics() {
+            // This would normally fetch real data from the API
+            console.log('Updating real-time metrics...');
+        }
+
+        // Update metrics every 30 seconds in a real application
+        setInterval(updateMetrics, 30000);
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Zona Sul AI Food Waste Reduction Platform initialized');
+            updateMetrics();
+        });
+    </script>
+</body>
+</html>
